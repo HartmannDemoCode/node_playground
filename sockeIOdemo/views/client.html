@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Socket.io</title>
+</head>
+
+<body>
+<h1>Communication with socket.io!</h1>
+<p>The server and the client send each other events (with socket.emit() ) and listen to the events that are sent (with socket.on(). Communication is printed in the console).</p>
+<p><input type="text" id="message" /><input type="button" value="Send the message" id="send" /></p>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    //Make connection on the server at the proper port number
+    var socket = io.connect('http://localhost:8001');
+    //eventhandler for when the server communicates a 'message' type info
+    socket.on('message', function(message) {
+        console.log(message);
+    });
+    document.getElementById("send").onclick = function () {
+        //emit an event of type 'message' for the server to react to.
+        var message = document.getElementById("message").value;
+        socket.emit('message', message);
+    };
+    //When the page loads we ask the username and emits another type of event: sendUserName.
+    var username = prompt("Hello! Enter your username");
+    socket.emit('sendUserName', username);
+</script>
+</body>
+</html>
